@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌱 AI Food & Nutrition Waste Reducer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #EBF4F8;
+            color: #2C3E50;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(44, 62, 80, 0.9), rgba(44, 62, 80, 0.9)),
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300"><circle cx="100" cy="150" r="40" fill="%23E74C3C"/><circle cx="300" cy="100" r="50" fill="%234A90E2"/><circle cx="500" cy="200" r="35" fill="%23FDB756"/><circle cx="700" cy="120" r="45" fill="%237DD3C0"/><line x1="100" y1="150" x2="300" y2="100" stroke="%23A4E8A4" stroke-width="3"/><line x1="300" y1="100" x2="500" y2="200" stroke="%234A90E2" stroke-width="3"/><line x1="500" y1="200" x2="700" y2="120" stroke="%23FDB756" stroke-width="3"/></svg>');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            opacity: 0.95;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Navigation */
+        .nav {
+            background: white;
+            border-bottom: 2px solid #D3E2E8;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .nav-container {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0 2rem;
+        }
+
+        .nav button {
+            padding: 1rem 1.5rem;
+            border: none;
+            background: none;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #7A8C9E;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav button:hover {
+            color: #2C3E50;
+        }
+
+        .nav button.active {
+            color: #4A90E2;
+            border-bottom-color: #4A90E2;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 3rem 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        /* Meal Input Grid */
+        .meal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .meal-section label {
+            display: block;
+        }
+
+        .meal-header {
+            text-align: center;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .meal-breakfast { background-color: #7DD3C0; color: #2C3E50; }
+        .meal-lunch { background-color: #A78BFA; color: white; }
+        .meal-dinner { background-color: #FDB756; color: #2C3E50; }
+        .meal-snacks { background-color: #A4E8A4; color: #2C3E50; }
+
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #D3E2E8;
+            border-radius: 0.5rem;
+            font-family: inherit;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #4A90E2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        }
+
+        .meal-info {
+            font-size: 0.75rem;
+            background: #F5F8FA;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            margin-top: 0.75rem;
+        }
+
+        /* Calculate Button */
+        .calculate-btn {
+            display: block;
+            margin: 2rem auto;
+            padding: 1rem 3rem;
+            background: #4A90E2;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1.125rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+            transition: all 0.2s;
+        }
+
+        .calculate-btn:hover {
+            background: #3A7BC8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(74, 144, 226, 0.4);
+        }
+
+        .calculate-btn:disabled {
+            background: #B8C6D3;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Results Table */
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        .results-table th,
+        .results-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #E5EDF1;
+        }
+
+        .results-table th {
+            background: #F5F8FA;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .results-table td {
+            text-align: center;
+        }
+
+        .results-table tbody tr:hover {
+            background: #F9FBFC;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-healthy { background: #4CAF50; color: white; }
+        .status-moderate { background: #FDB756; color: #2C3E50; }
+        .status-unhealthy { background: #EF5350; color: white; }
+
+        /* Charts */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        /* Suggestions */
+        .suggestions {
+            margin-top: 2rem;
+        }
+
+        .suggestion-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: #F0F7FF;
+            border-left: 4px solid #4A90E2;
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Hidden */
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.75rem; }
+            .meal-grid { grid-template-columns: 1fr; }
+            .charts-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="container">
+            <h1>🌱 AI Food & Nutrition Waste Reducer</h1>
+            <p style="font-size: 1.25rem; margin-bottom: 0.5rem;">Innovate Your Plate: Smart Sustainability for Class 10 Science</p>
+            <p>Enter your meals to see nutrition info, estimated food waste, and healthy alternatives</p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container nav-container">
+            <button class="nav-btn active" onclick="showTab('input')">Home</button>
+            <button class="nav-btn" onclick="showTab('results')">Dashboard</button>
+            <button class="nav-btn" onclick="showTab('education')">About</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container main-content">
+        <!-- Input Tab -->
+        <div id="input-tab">
+            <div class="card">
+                <h2 class="section-title">Meal Input</h2>
+                <div class="meal-grid">
+                    <div class="meal-section">
+                        <label>
+                            <div class="meal-header meal-breakfast">🍳 Breakfast</div>
+                            <select id="breakfast" onchange="updateMealInfo('breakfast')">
+                                <option value="">Select Breakfast</option>
+                                <option value="idli">2 Idli (Steamed Rice Cakes)</option>
+                                <option value="dosa">1 Dosa (Medium)</option>
+                                <option value="poha">1 Bowl Poha</option>
+                                <option value="bread">2 Slices Bread</option>
+                                <option value="upma">1 Bowl Upma</option>
+                                <option value="paratha">2 Paratha</option>
+                            </select>
+                            <div id="breakfast-info" class="meal-info hidden"></div>
+                        </label>
+                    </div>
+                    <div class="meal-section">
+                        <label>
+                            <div class="meal-header meal-lunch">🍛 Lunch</div>
+                            <select id="lunch" onchange="updateMealInfo('lunch')">
+                                <option value="">Select Lunch</option>
+                                <option value="ricedal">1 Plate Rice & Dal</option>
+                                <option value="rotiveg">2 Roti with Vegetables</option>
+                                <option value="chapati">Chapati with Sabzi</option>
+                                <option value="sambarrice">1 Bowl Sambar Rice</option>
+                                <option value="chole">Chole Bhature</option>
+                                <option value="rajma">1 Plate Rajma Rice</option>
+                            </select>
+                            <div id="lunch-info" class="meal-info hidden"></div>
+                        </label>
+                    </div>
+                    <div class="meal-section">
+                        <label>
+                            <div class="meal-header meal-dinner">🍲 Dinner</div>
+                            <select id="dinner" onchange="updateMealInfo('dinner')">
+                                <option value="">Select Dinner</option>
+                                <option value="friedrice">1 Plate Fried Rice</option>
+                                <option value="maggi">1 Pack Maggi Noodles</option>
+                                <option value="dalmakhani">Dal Makhani with Rice</option>
+                                <option value="paneer">Paneer Curry with Roti</option>
+                                <option value="biryani">1 Plate Biryani</option>
+                            </select>
+                            <div id="dinner-info" class="meal-info hidden"></div>
+                        </label>
+                    </div>
+                    <div class="meal-section">
+                        <label>
+                            <div class="meal-header meal-snacks">🍎 Snacks</div>
+                            <select id="snacks" onchange="updateMealInfo('snacks')">
+                                <option value="">Select Snacks</option>
+                                <option value="pakora">4 Pakora</option>
+                                <option value="samosa">2 Samosa</option>
+                                <option value="apple">1 Apple</option>
+                                <option value="banana">1 Banana</option>
+                                <option value="nuts">Handful of Mixed Nuts</option>
+                                <option value="curd">1 Bowl Curd</option>
+                                <option value="biscuits">4 Biscuits</option>
+                            </select>
+                            <div id="snacks-info" class="meal-info hidden"></div>
+                        </label>
+                    </div>
+                </div>
+                <button class="calculate-btn" onclick="calculateResults()">Calculate</button>
+            </div>
+        </div>
+
+        <!-- Results Tab -->
+        <div id="results-tab" class="hidden">
+            <div class="card">
+                <h2 class="section-title">Nutrition Analysis Results</h2>
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Meal</th>
+                            <th>Food Item</th>
+                            <th>Calories</th>
+                            <th>Protein (g)</th>
+                            <th>Carbs (g)</th>
+                            <th>Fats (g)</th>
+                            <th>Waste %</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-tbody"></tbody>
+                    <tfoot id="results-tfoot"></tfoot>
+                </table>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <canvas id="pieChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card suggestions">
+                <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">AI Recommendations</h3>
+                <div id="suggestions-container"></div>
+            </div>
+
+            <div class="card">
+                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">Color Coding Legend</h3>
+                <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="width: 24px; height: 24px; border-radius: 4px; background: #4CAF50;"></div>
+                        <span>Healthy / Low Waste</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="width: 24px; height: 24px; border-radius: 4px; background: #FDB756;"></div>
+                        <span>Moderate</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="width: 24px; height: 24px; border-radius: 4px; background: #EF5350;"></div>
+                        <span>High Calories / High Waste</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Education Tab -->
+        <div id="education-tab" class="hidden">
+            <div class="card">
+                <h2 class="section-title">About This Project</h2>
+                <p style="font-size: 1.125rem; margin-bottom: 1rem;">
+                    The <strong>AI Food & Nutrition Waste Reducer</strong> is an educational web application
+                    designed for Class 10 science exhibitions. It demonstrates how artificial intelligence can
+                    help students make healthier food choices while reducing food waste.
+                </p>
+                <p style="color: #7A8C9E;">
+                    By analyzing common Indian meals, this tool provides instant feedback on nutritional content,
+                    estimated food waste, and personalized suggestions for healthier, more sustainable eating habits.
+                </p>
+            </div>
+            <div class="card">
+                <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">Key Features</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 1rem; background: #F0F7FF; margin-bottom: 0.75rem; border-radius: 0.5rem;">
+                        <strong>📊 Instant Nutrition Analysis:</strong> Get immediate feedback on calories, protein, carbs, and fats
+                    </li>
+                    <li style="padding: 1rem; background: #F0F7FF; margin-bottom: 0.75rem; border-radius: 0.5rem;">
+                        <strong>♻️ Waste Estimation:</strong> See how much food waste each meal generates
+                    </li>
+                    <li style="padding: 1rem; background: #F0F7FF; margin-bottom: 0.75rem; border-radius: 0.5rem;">
+                        <strong>🤖 AI Recommendations:</strong> Receive personalized suggestions for healthier alternatives
+                    </li>
+                    <li style="padding: 1rem; background: #F0F7FF; margin-bottom: 0.75rem; border-radius: 0.5rem;">
+                        <strong>📈 Visual Analytics:</strong> Interactive charts show nutrition distribution and waste levels
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Food Database
+        const foodData = {
+            idli: { name: '2 Idli', calories: 150, protein: 4, carbs: 30, fats: 1, waste: 5 },
+            dosa: { name: '1 Dosa', calories: 180, protein: 5, carbs: 28, fats: 5, waste: 8 },
+            poha: { name: '1 Bowl Poha', calories: 250, protein: 6, carbs: 40, fats: 8, waste: 10 },
+            bread: { name: '2 Slices Bread', calories: 160, protein: 5, carbs: 30, fats: 2, waste: 15 },
+            upma: { name: '1 Bowl Upma', calories: 200, protein: 5, carbs: 35, fats: 6, waste: 7 },
+            paratha: { name: '2 Paratha', calories: 320, protein: 7, carbs: 42, fats: 14, waste: 10 },
+            ricedal: { name: 'Rice & Dal', calories: 350, protein: 12, carbs: 65, fats: 5, waste: 12 },
+            rotiveg: { name: '2 Roti with Vegetables', calories: 280, protein: 8, carbs: 50, fats: 6, waste: 8 },
+            chapati: { name: 'Chapati with Sabzi', calories: 300, protein: 9, carbs: 52, fats: 7, waste: 9 },
+            sambarrice: { name: 'Sambar Rice', calories: 320, protein: 10, carbs: 58, fats: 6, waste: 11 },
+            chole: { name: 'Chole Bhature', calories: 450, protein: 12, carbs: 62, fats: 18, waste: 15 },
+            rajma: { name: 'Rajma Rice', calories: 380, protein: 14, carbs: 64, fats: 8, waste: 10 },
+            friedrice: { name: 'Fried Rice', calories: 400, protein: 8, carbs: 70, fats: 12, waste: 14 },
+            maggi: { name: 'Maggi Noodles', calories: 350, protein: 9, carbs: 60, fats: 14, waste: 5 },
+            dalmakhani: { name: 'Dal Makhani with Rice', calories: 420, protein: 13, carbs: 62, fats: 15, waste: 12 },
+            paneer: { name: 'Paneer with Roti', calories: 380, protein: 16, carbs: 48, fats: 14, waste: 10 },
+            biryani: { name: 'Biryani', calories: 480, protein: 15, carbs: 72, fats: 16, waste: 18 },
+            pakora: { name: '4 Pakora', calories: 220, protein: 4, carbs: 22, fats: 14, waste: 8 },
+            samosa: { name: '2 Samosa', calories: 260, protein: 5, carbs: 32, fats: 14, waste: 10 },
+            apple: { name: '1 Apple', calories: 95, protein: 0.5, carbs: 25, fats: 0.3, waste: 15 },
+            banana: { name: '1 Banana', calories: 105, protein: 1.3, carbs: 27, fats: 0.4, waste: 20 },
+            nuts: { name: 'Mixed Nuts', calories: 180, protein: 6, carbs: 8, fats: 16, waste: 5 },
+            curd: { name: '1 Bowl Curd', calories: 120, protein: 6, carbs: 12, fats: 5, waste: 8 },
+            biscuits: { name: '4 Biscuits', calories: 200, protein: 3, carbs: 30, fats: 8, waste: 5 }
+        };
+
+        let pieChartInstance = null;
+        let barChartInstance = null;
+
+        function showTab(tabName) {
+            document.querySelectorAll('[id$="-tab"]').forEach(tab => tab.classList.add('hidden'));
+            document.getElementById(tabName + '-tab').classList.remove('hidden');
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function updateMealInfo(meal) {
+            const select = document.getElementById(meal);
+            const info = document.getElementById(meal + '-info');
+            const food = foodData[select.value];
+
+            if (food) {
+                info.innerHTML = `Calories: ${food.calories} kcal<br>Protein: ${food.protein}g`;
+                info.classList.remove('hidden');
+            } else {
+                info.classList.add('hidden');
+            }
+        }
+
+        function getHealthStatus(calories, fats) {
+            if (calories > 450 || fats > 15) return 'unhealthy';
+            if (calories > 350 || fats > 10) return 'moderate';
+            return 'healthy';
+        }
+
+        function getWasteStatus(waste) {
+            if (waste <= 7) return 'low';
+            if (waste <= 12) return 'medium';
+            return 'high';
+        }
+
+        function calculateResults() {
+            const meals = ['breakfast', 'lunch', 'dinner', 'snacks'];
+            const results = [];
+            let totals = { calories: 0, protein: 0, carbs: 0, fats: 0, waste: 0, count: 0 };
+
+            meals.forEach(meal => {
+                const value = document.getElementById(meal).value;
+                if (value && foodData[value]) {
+                    const food = foodData[value];
+                    results.push({
+                        meal: meal.charAt(0).toUpperCase() + meal.slice(1),
+                        food: food,
+                        healthStatus: getHealthStatus(food.calories, food.fats),
+                        wasteStatus: getWasteStatus(food.waste)
+                    });
+                    totals.calories += food.calories;
+                    totals.protein += food.protein;
+                    totals.carbs += food.carbs;
+                    totals.fats += food.fats;
+                    totals.waste += food.waste;
+                    totals.count++;
+                }
+            });
+
+            if (totals.count === 0) {
+                alert('Please select at least one meal!');
+                return;
+            }
+
+            totals.waste = totals.waste / totals.count;
+
+            // Populate results table
+            const tbody = document.getElementById('results-tbody');
+            tbody.innerHTML = results.map(r => `
+                <tr>
+                    <td><strong>${r.meal}</strong></td>
+                    <td>${r.food.name}</td>
+                    <td>${r.food.calories}</td>
+                    <td>${r.food.protein}</td>
+                    <td>${r.food.carbs}</td>
+                    <td>${r.food.fats}</td>
+                    <td><span class="status-badge status-${r.wasteStatus}">${r.food.waste}%</span></td>
+                    <td><span class="status-badge status-${r.healthStatus}">
+                        ${r.healthStatus === 'healthy' ? '✓ Healthy' : r.healthStatus === 'moderate' ? '⚠ Moderate' : '✗ High Cal'}
+                    </span></td>
+                </tr>
+            `).join('');
+
+            document.getElementById('results-tfoot').innerHTML = `
+                <tr style="background: #F5F8FA; font-weight: 700;">
+                    <td colspan="2">TOTAL</td>
+                    <td>${totals.calories}</td>
+                    <td>${totals.protein.toFixed(1)}</td>
+                    <td>${totals.carbs.toFixed(1)}</td>
+                    <td>${totals.fats.toFixed(1)}</td>
+                    <td>${totals.waste.toFixed(1)}%</td>
+                    <td></td>
+                </tr>
+            `;
+
+            // Generate AI suggestions
+            const suggestions = [];
+            if (totals.calories > 2000) suggestions.push('🔴 High daily calorie intake detected. Consider reducing portion sizes by 15-20%.');
+            else if (totals.calories < 1500) suggestions.push('🟡 Calorie intake is low. Add nutrient-dense foods like nuts or fruits.');
+            else suggestions.push('🟢 Your calorie intake is within a healthy range for a Class 10 student.');
+
+            if (totals.protein < 45) suggestions.push('⚠️ Increase protein intake. Add dal, paneer, curd, or nuts to your meals.');
+            if (totals.waste > 12) suggestions.push('♻️ High food waste detected. Plan meals weekly to reduce over-purchasing.');
+            suggestions.push('🌾 Opt for seasonal fruits and locally grown vegetables to reduce carbon footprint.');
+
+            document.getElementById('suggestions-container').innerHTML = suggestions.map(s =>
+                `<div class="suggestion-item"><span style="font-size: 1.5rem;">💡</span><p>${s}</p></div>`
+            ).join('');
+
+            // Create charts
+            createCharts(totals);
+
+            // Show results tab
+            showTab('results');
+            document.querySelectorAll('.nav-btn')[1].classList.add('active');
+            document.querySelectorAll('.nav-btn')[0].classList.remove('active');
+        }
+
+        function createCharts(totals) {
+            // Destroy existing charts
+            if (pieChartInstance) pieChartInstance.destroy();
+            if (barChartInstance) barChartInstance.destroy();
+
+            // Pie Chart
+            const pieCtx = document.getElementById('pieChart').getContext('2d');
+            pieChartInstance = new Chart(pieCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Protein', 'Carbs', 'Fats'],
+                    datasets: [{
+                        data: [totals.protein * 4, totals.carbs * 4, totals.fats * 9],
+                        backgroundColor: ['#4A90E2', '#FDB756', '#4CAF50']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: { display: true, text: 'Nutrition Distribution', font: { size: 18, weight: 'bold' } },
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+
+            // Bar Chart
+            const barCtx = document.getElementById('barChart').getContext('2d');
+            const meals = ['breakfast', 'lunch', 'dinner', 'snacks'];
+            const wasteData = meals.map(m => {
+                const val = document.getElementById(m).value;
+                return val ? foodData[val].waste : 0;
+            }).filter(w => w > 0);
+
+            barChartInstance = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: meals.filter(m => document.getElementById(m).value).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+                    datasets: [{
+                        label: 'Waste %',
+                        data: wasteData,
+                        backgroundColor: wasteData.map(w => w <= 7 ? '#4CAF50' : w <= 12 ? '#FDB756' : '#EF5350')
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: { display: true, text: 'Food Waste Levels', font: { size: 18, weight: 'bold' } },
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, max: 25, ticks: { callback: v => v + '%' } }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

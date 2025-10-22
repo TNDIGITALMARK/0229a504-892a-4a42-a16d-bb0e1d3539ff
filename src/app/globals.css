@@ -1,59 +1,94 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/*
+=================================================================
+AI FOOD & NUTRITION WASTE REDUCER - DESIGN SYSTEM
+=================================================================
+Pixel-perfect replication of design reference with:
+- Exhibition-friendly bright colors
+- Clean, modern typography with Inter font
+- Educational science theme
+- Cohesive color coding system
+=================================================================
 */
 
 :root {
-  /* Pure white background with crisp black text */
-  --background: 0 0% 100%;
-  --foreground: 0 0% 0%;
+  /* === FONT SYSTEM === */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
-  /* Clean white cards with black text */
-  --card: 0 0% 100%;
-  --card-foreground: 0 0% 0%;
+  /* === COLOR SYSTEM - Exhibition Palette === */
+  /* Background - Light Blue-Gray for exhibition display */
+  --background: 200 25% 95%; /* #EBF4F8 */
+  --foreground: 210 20% 20%; /* #2C3E50 dark navy text */
 
-  /* Popovers with white background */
-  --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 0%;
+  /* Card System - Clean white cards */
+  --card: 0 0% 100%; /* Pure white */
+  --card-foreground: 210 20% 20%;
 
-  /* Primary: Black with white text */
-  --primary: 0 0% 0%;
+  /* Primary - Blue Calculate Button */
+  --primary: 210 70% 55%; /* #4A90E2 blue */
   --primary-foreground: 0 0% 100%;
 
-  /* Secondary: Light gray background with black text */
-  --secondary: 0 0% 97%;
-  --secondary-foreground: 0 0% 0%;
+  /* Meal Category Colors - Vibrant Exhibition Colors */
+  --breakfast-green: 165 65% 60%; /* #7DD3C0 mint green */
+  --lunch-purple: 260 65% 70%; /* #A78BFA lavender */
+  --dinner-orange: 35 95% 65%; /* #FDB756 warm orange */
+  --snacks-light-green: 120 55% 75%; /* #A4E8A4 light green */
 
-  /* Muted: Subtle gray with darker text */
-  --muted: 0 0% 96%;
-  --muted-foreground: 0 0% 40%;
+  /* Traffic Light System - Health & Waste Indicators */
+  --success-green: 140 70% 50%; /* #4CAF50 healthy/low waste */
+  --warning-yellow: 35 95% 65%; /* #FDB756 moderate */
+  --danger-red: 5 75% 58%; /* #EF5350 high calories/waste */
 
-  /* Accent: Light gray */
-  --accent: 0 0% 96%;
-  --accent-foreground: 0 0% 0%;
+  /* Hero Section - Dark Navy */
+  --hero-dark: 210 20% 20%; /* #2C3E50 */
 
-  /* Destructive: Clean red */
-  --destructive: 0 70% 50%;
+  /* Secondary & Muted */
+  --secondary: 200 20% 90%;
+  --secondary-foreground: 210 20% 20%;
+  --muted: 200 15% 92%;
+  --muted-foreground: 210 10% 45%;
+
+  /* Accent - Light Blue-Gray */
+  --accent: 200 25% 94%;
+  --accent-foreground: 210 20% 20%;
+
+  /* Destructive */
+  --destructive: 5 75% 58%;
   --destructive-foreground: 0 0% 100%;
 
-  /* Borders: Subtle gray */
-  --border: 0 0% 90%;
-  --input: 0 0% 90%;
-  --ring: 0 0% 0%;
+  /* Borders & Inputs - Subtle */
+  --border: 200 15% 85%;
+  --input: 200 15% 88%;
+  --ring: 210 70% 55%;
 
-  /* Minimal rounded corners */
-  --radius: 0.375rem;
+  /* Border Radius - Rounded for friendly feel */
+  --radius: 0.5rem; /* 8px */
 
-  /* Sidebar: Clean white with black text */
+  /* Sidebar */
   --sidebar-background: 0 0% 100%;
-  --sidebar-foreground: 0 0% 0%;
-  --sidebar-primary: 0 0% 0%;
+  --sidebar-foreground: 210 20% 20%;
+  --sidebar-primary: 210 70% 55%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 0 0% 96%;
-  --sidebar-accent-foreground: 0 0% 0%;
-  --sidebar-border: 0 0% 90%;
-  --sidebar-ring: 0 0% 0%;
+  --sidebar-accent: 200 20% 94%;
+  --sidebar-accent-foreground: 210 20% 20%;
+  --sidebar-border: 200 15% 85%;
+  --sidebar-ring: 210 70% 55%;
+
+  /* === SPACING SYSTEM === */
+  --spacing-xs: 0.5rem;   /* 8px */
+  --spacing-sm: 0.75rem;  /* 12px */
+  --spacing-md: 1rem;     /* 16px */
+  --spacing-lg: 1.5rem;   /* 24px */
+  --spacing-xl: 2rem;     /* 32px */
+  --spacing-2xl: 3rem;    /* 48px */
+
+  /* === SHADOW SYSTEM === */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 8px 0 rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 4px 12px 0 rgba(0, 0, 0, 0.1);
 }
 
 .dark {
@@ -168,30 +203,133 @@ All colors MUST be HSL.
   border-color: hsl(var(--border));
 }
 
+/* === BASE STYLES === */
+* {
+  border-color: hsl(var(--border));
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
 body {
+  margin: 0;
+  padding: 0;
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
+  font-family: var(--font-primary);
+  font-size: 1rem;
   font-feature-settings: "rlig" 1, "calt" 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
-/* Minimal, clean typography */
+/* === TYPOGRAPHY SCALE === */
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
-  letter-spacing: -0.025em;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: hsl(var(--foreground));
+  margin: 0;
+  line-height: 1.2;
 }
 
-/* Clean button styles */
+h1 {
+  font-size: 2.25rem; /* 36px - Exhibition headers */
+  font-weight: 800;
+}
+
+h2 {
+  font-size: 1.875rem; /* 30px - Section headers */
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 1.5rem; /* 24px - Subsection headers */
+  font-weight: 600;
+}
+
+h4 {
+  font-size: 1.25rem; /* 20px - Card headers */
+  font-weight: 600;
+}
+
+h5 {
+  font-size: 1.125rem; /* 18px - Small headers */
+  font-weight: 600;
+}
+
+h6 {
+  font-size: 1rem; /* 16px - Tiny headers */
+  font-weight: 600;
+}
+
+p {
+  margin: 0 0 1rem 0;
+  line-height: 1.6;
+}
+
+a {
+  color: hsl(var(--primary));
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: hsl(var(--primary) / 0.8);
+}
+
+/* === BUTTON STYLES === */
 button {
-  font-weight: 500;
+  font-family: var(--font-primary);
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
 }
 
-/* Subtle shadows for depth */
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* === FORM ELEMENTS === */
+input, select, textarea {
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background-color: hsl(var(--card));
+  color: hsl(var(--foreground));
+  transition: all 0.2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: hsl(var(--ring));
+  box-shadow: 0 0 0 3px hsl(var(--ring) / 0.1);
+}
+
+select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+}
+
+/* === SHADOW UTILITIES === */
 .shadow-sm {
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  box-shadow: var(--shadow-sm);
 }
 
 .shadow {
@@ -199,5 +337,73 @@ button {
 }
 
 .shadow-md {
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  box-shadow: var(--shadow-md);
+}
+
+.shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+/* === UTILITY CLASSES === */
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.card {
+  background: hsl(var(--card));
+  border-radius: var(--radius);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+}
+
+/* === MEAL CATEGORY COLORS === */
+.meal-breakfast {
+  background-color: hsl(var(--breakfast-green));
+  color: hsl(210 20% 20%);
+}
+
+.meal-lunch {
+  background-color: hsl(var(--lunch-purple));
+  color: white;
+}
+
+.meal-dinner {
+  background-color: hsl(var(--dinner-orange));
+  color: hsl(210 20% 20%);
+}
+
+.meal-snacks {
+  background-color: hsl(var(--snacks-light-green));
+  color: hsl(210 20% 20%);
+}
+
+/* === TRAFFIC LIGHT INDICATORS === */
+.status-healthy {
+  color: hsl(var(--success-green));
+}
+
+.status-moderate {
+  color: hsl(var(--warning-yellow));
+}
+
+.status-unhealthy {
+  color: hsl(var(--danger-red));
+}
+
+.bg-healthy {
+  background-color: hsl(var(--success-green));
+  color: white;
+}
+
+.bg-moderate {
+  background-color: hsl(var(--warning-yellow));
+  color: hsl(210 20% 20%);
+}
+
+.bg-unhealthy {
+  background-color: hsl(var(--danger-red));
+  color: white;
 }
